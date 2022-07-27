@@ -1,0 +1,19 @@
+java 11, 1.8 version 설치
+
+
+
+help
+-> eclipse marketplace
+-> find - sts 검색
+-> Spring Tools 4 (aka ~~) install
+
+
+
+우측 상단에 open perspective
+-> java 선택
+
+----------------------------
+
+spring.io
+-> project 
+-> spring initializr
