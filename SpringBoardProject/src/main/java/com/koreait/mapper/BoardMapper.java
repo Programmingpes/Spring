@@ -1,7 +1,9 @@
 package com.koreait.mapper;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -24,4 +26,24 @@ public interface BoardMapper {
 	void addBoardCount(int bno);
 
 	List<FileDTO> selectFileList(int bno);
+
+	int deleteBoard(int bno);
+
+	int addBoardComment(BoardCommentDTO dto);
+	
+	int insertBoardLike(Map<String, Object> map);
+	
+	int deleteBoardLike(Map<String, Object> map);
+	
+	int insertBoardHate(Map<String, Object> map);
+	
+	int deleteBoardHate(Map<String, Object> map);
+
+	int boardWrite(BoardDTO dto);
+
+	int selectBno();
+
+	void insertFile(FileDTO file);
+
+	FileDTO selectFile(HashMap<String, Integer> map);
 }

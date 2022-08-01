@@ -83,11 +83,7 @@
 		<c:forEach var="dto" items="${requestScope.list }">
 			<tr>
 				<td>${dto.bno }</td>
-				<td><a href="boardView.do?bno=${dto.bno }"> ${dto.title }
-					<c:if test="${dto.ccount > 0 }">
-						[${dto.ccount}]
-					</c:if>
-				</a></td>
+				<td><a href="boardView.do?bno=${dto.bno }"> ${dto.title }</a></td>
 				<td>${dto.writer}</td>
 				<td>${dto.bdate }</td>
 				<td>${dto.bcount }</td>
@@ -99,15 +95,15 @@
 			<td colspan="7">
 					<div class="page_bar">
 						<c:if test="${pagging.previousPageGroup }">
-							<a href="main.do?pageNo=${pagging.startPageOfPageGroup - 1 }">◀</a>
+							<a href="/?pageNo=${pagging.startPageOfPageGroup - 1 }">◀</a>
 						</c:if>
 						<c:forEach var="i" begin="${pagging.startPageOfPageGroup}" 
 						end="${pagging.endPageOfPageGroup}">
-							<a href="main.do?pageNo=${i }">${ i}</a>
+							<a href="/?pageNo=${i }">${ i}</a>
 						</c:forEach>
 					
 						<c:if test="${pagging.nextPageGroup }">
-							<a href="main.do?pageNo=${pagging.endPageOfPageGroup + 1 }">▶</a>
+							<a href="/?pageNo=${pagging.endPageOfPageGroup + 1 }">▶</a>
 						</c:if>
 						<a href="boardWriteView.do" class="btn_writer">글쓰기</a>
 					</div>

@@ -138,25 +138,18 @@
 			// 0 - like, 1 - hate
 			// bno;
 			var obj = $(this);
-			d = "bno=${requestScope.board.bno}&mode="+$(this).index();
+			var idx = $(this).index();
+			d = "bno=${requestScope.board.bno}&mode="+idx;
 			$.ajax({
 				url : "plusLikeHate.do",
 				data : d,
 				method : "get",
 				success:function(result){
-					result = result.trim();
-					if(result == "false"){
-						alert("로그인후 이용하실 수 있습니다.");
-						location.href="${pageContext.request.contextPath}/loginView.do";
-					}
-					console.log(result, result.length);
-					$(obj).children("span").html(result);
-					
-				},
-				error : function(request, status, error) {
-					alert(request.responseText.trim());
-					location.href="${pageContext.request.contextPath}/loginView.do";
-					
+					var msg = "이 게시물에다가";
+					msg += idx == 0 ? "좋아요를 " : "싫어요를 ";
+					msg += result == 1 ? "하셨습니다." : "취소하셨습니다.";
+					alert(msg);
+					location.reload();					
 				}
 			});
 		});
@@ -231,7 +224,7 @@
 						<a href="#" class="btn_like">
 							<img src="${pageContext.request.contextPath }/img/like.png" class="hate">
 							<!-- 싫어요 개수 -->
-							<span>${requestScope.board.blike }</span>
+							<span>${requestScope.board.bhate }</span>
 						</a>
 					</td>
 				</tr>
@@ -243,7 +236,7 @@
 							<input type="hidden" name="bno" value="${requestScope.board.bno }">
 							<input type="hidden" name="writer" value="${sessionScope.id }">
 							<span class="writer">${sessionScope.id }</span>
-							<textarea name="content" maxlength="500"></textarea>
+							<textarea name="comment" maxlength="500"></textarea>
 							<p class="length">0/500</p><hr>
 							<p style="text-align: right;"><button type="button">등록</button></p>
 							</form>							
@@ -252,14 +245,14 @@
 				</tr>
 					</c:if>
 				<tr>
-					<th><a href="/main.do" class="btn">목록보기</a></th>
+					<th><a href="/" class="btn">목록보기</a></th>
 					<td style="text-align: right;">
 					<c:if test="${sessionScope.id == requestScope.board.writer }">
 						<a href="boardUpdateView.do" class="btn">수정</a>
 						<a href="deleteBoard.do?bno=${requestScope.board.bno }" class="btn">삭제</a>
 					</c:if>
-						<a href="#" class="btn">이전글</a>
-						<a href="#" class="btn">다음글</a>
+						<a href="boardView.do?bno=${requestScope.board.bno -1 }" class="btn">이전글</a>
+						<a href="boardView.do?bno=${requestScope.board.bno +1 }" class="btn">다음글</a>
 						
 					</td>
 				</tr>
@@ -269,12 +262,12 @@
 					
 					<c:forEach var="comment" items="${requestScope.comment }">
 						<p>${comment.writer }
-						${comment.cdate }
-						<a href="commentLike.do?cno=${comment.cno }&bno=${board.bno}">${comment.clike }</a>
-						<a href="commentHate.do?cno=${comment.cno }&bno=${board.bno}">${comment.chate }</a>
+						${comment.date }
+						<a href="commentLike.do?cno=${comment.cno }&bno=${board.bno}">${comment.like }</a>
+						<a href="commentHate.do?cno=${comment.cno }&bno=${board.bno}">${comment.hate }</a>
 						</p>
 						<p>
-							${comment.content }
+							${comment.comment }
 						</p>
 					</c:forEach>
 					
