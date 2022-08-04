@@ -80,7 +80,11 @@ public class MemberDTO {
 	public void setGradeName(String gradeName) {
 		this.gradeName = gradeName;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "MemberDTO [id=" + id + ", passwd=" + passwd + ", name=" + name + ", nick=" + nick + ", gradeNo="
+				+ gradeNo + ", gradeName=" + gradeName + "]";
+	}
 	
 }

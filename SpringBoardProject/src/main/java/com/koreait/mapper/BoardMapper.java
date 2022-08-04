@@ -46,4 +46,20 @@ public interface BoardMapper {
 	void insertFile(FileDTO file);
 
 	FileDTO selectFile(HashMap<String, Integer> map);
+	
+	int deleteBoardComment(int cno);
+	
+	int insertBoardCommentLike(Map<String, Object> map);
+	
+	int deleteBoardCommentLike(Map<String, Object> map);
+	
+	int insertBoardCommentHate(Map<String, Object> map);
+	
+	int deleteBoardCommentHate(Map<String, Object> map);
+
+	int selectBoardImageNo();
+
+	void insertBoardImage(Map<String, Object> map);
+
+	String selectImageFile(int fno);
 }

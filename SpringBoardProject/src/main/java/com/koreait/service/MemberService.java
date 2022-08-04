@@ -1,6 +1,8 @@
 package com.koreait.service;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -18,5 +20,29 @@ public class MemberService {
 	public MemberDTO login(HashMap<String, String> map) {
 		return mapper.login(map);
 	}
+	public int insertMember(MemberDTO dto) {
+		return mapper.insertMember(dto);
+	}
 
+	public List<MemberDTO> selectAllMember() {
+		return mapper.selectAllMember();
+	}
+
+	public int deleteMember(String id) {
+		return mapper.deleteMember(id);
+	}
+
+	public int updateMember(MemberDTO dto) {
+		return mapper.updateMember(dto);
+	}
+
+	public List<MemberDTO> selectMember(String kind, String search) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("kind", kind);
+		if(kind.equals("gradeNo"))
+			map.put("search", Integer.parseInt(search));
+		else
+			map.put("search", search);
+		return mapper.selectMember(map);
+	}
 }

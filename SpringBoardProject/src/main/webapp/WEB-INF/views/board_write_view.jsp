@@ -63,10 +63,21 @@
 	p input{
 		width:80% !important;
 	}
+	.ck-editor__editable_inline {
+		min-height : 500px;
+	}
 </style>
 </head>
+<!-- <script src="https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js"></script> -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/ckeditor.js"></script>
+<script src="/UploadAdapter.js"></script>
 <script>
+	function uploadAdapterPlugin(editor){
+		editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+			return new UploadAdapter(loader)
+		}
+	}
 	$(function(){
 		var count = 3;//첨부파일 태그 개수
 		$("#plus").click(function(){
@@ -78,6 +89,17 @@
 			if(count == 1) return;
 				$(this).parent().parent().children("p").last().remove();
 			count--;
+		});
+		
+		var editor;
+		ClassicEditor.create($("#editor")[0],{
+			extraPlugins:[uploadAdapterPlugin]
+		})
+		.then(editor => {
+			console.log("에디터 초기화 완료",editor);
+			myEditor = editor;
+		}).catch(error =>{
+			console.log(error);
 		});
 	});
 </script>
@@ -109,7 +131,7 @@
 					</td>
 				</tr>
 				<tr>
-					<th style="vertical-align: top;">내용</th><td><textarea name="content"></textarea></td>
+					<th style="vertical-align: top;">내용</th><td><textarea name="content" id="editor"></textarea></td>
 				</tr>
 				<!-- 첨부 파일 -->
 				<tr>
@@ -121,7 +143,7 @@
 					</td>
 				</tr>
 				<tr>
-					<th><a href="/?pageNo=${requestScope.pageNo == null ? 1 : requestScope.pageNo }" class="btn">목록보기</a></th>
+					<th><a href="main.do?pageNo=${requestScope.pageNo == null ? 1 : requestScope.pageNo }" class="btn">목록보기</a></th>
 					<td style="text-align: right;">
 						<a href="javascript:history.back();" class="btn">뒤로가기</a>
 						<button class="btn">글쓰기</button>
