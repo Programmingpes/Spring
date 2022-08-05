@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -31,18 +32,22 @@ import com.koreait.dto.BoardCommentDTO;
 import com.koreait.dto.BoardDTO;
 import com.koreait.dto.FileDTO;
 import com.koreait.dto.MemberDTO;
+import com.koreait.dto.QnADTO;
 import com.koreait.service.BoardService;
 import com.koreait.service.MemberService;
+import com.koreait.service.QnAService;
 import com.koreait.vo.PaggingVO;
 
 @Controller
 public class MainController {
 	private BoardService boardService;
 	private MemberService memberService;
+	private QnAService qnaService;
 
-	public MainController(BoardService boardService, MemberService memberService) {
+	public MainController(BoardService boardService, MemberService memberService, QnAService qnaService) {
 		this.boardService = boardService;
 		this.memberService = memberService;
+		this.qnaService = qnaService;
 	}
 	
 	@RequestMapping("/")
@@ -349,6 +354,58 @@ public class MainController {
 		}
 		bos.close();
 		fis.close();
+	}
+	
+	@RequestMapping("/qnaView.do")
+	public String qnaView(HttpSession session, Model model) {
+		
+		int page = 1;
+		String id = (String) session.getAttribute("id");
+		
+		if(id == null)
+			return "redirect:/loginView.do";
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("page", page);
+		List<QnADTO> list = qnaService.selectQnAlist(map);
+		model.addAttribute("list", list);
+		
+		
+		return "qna";
+	}
+	
+	@RequestMapping("/sendQnA.do")
+	public String qnaQuestion(QnADTO dto, HttpSession session) {
+		String id = (String) session.getAttribute("id");
+		dto.setWriter(id);
+		System.out.println(dto.toString());
+		qnaService.insertQnA(dto);
+		
+		return "redirect:/qnaView.do";
+	}
+	
+	@RequestMapping("nextQnAList.do")
+	public ResponseEntity<HashMap<String, Object>>
+	nextQnAList(int page, HttpSession session){
+		String id = (String) session.getAttribute("id");
+		int nextPage = 0;
+		Map<String, Object> hmap = new HashMap<String, Object>();
+		hmap.put("id", id);
+		hmap.put("page", page);
+		List<QnADTO> qlist = qnaService.selectQnAlist(hmap);
+		
+		hmap.put("page", page+1);
+		if(!qnaService.selectQnAlist(hmap).isEmpty())
+			nextPage = page+1;
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("nextPage", nextPage);
+		map.put("list", qlist);
+		
+		
+		
+		return ResponseEntity.ok(map);
 	}
 	
 }

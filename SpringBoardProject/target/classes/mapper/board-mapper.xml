@@ -80,4 +80,7 @@
  	<select id="selectImageFile" parameterType="int" resultType="String">
  		select path from board_image where bi_no = #{fno}
  	</select>
+ 	<insert id="insertQna" parameterType="map">
+ 		insert into qna(qno, title, content) values(QNA_SEQUENCE.nextval,#{title},#{content})
+ 	</insert>
 </mapper>
