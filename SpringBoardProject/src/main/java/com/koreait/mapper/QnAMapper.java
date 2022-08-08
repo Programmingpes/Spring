@@ -17,6 +17,16 @@ public interface QnAMapper {
 
 	List<QnADTO> selectQnAlist(Map<String, Object> map);
 
-	int selectAllCount(String id);
+	int selectAllCount();
+
+	List<QnADTO> selectAllQnAlist(int page);
+
+	QnADTO selectQnA(int qno);
+
+	int updateAnswer(Map<String, Object> map);
+
+	int updateViewStatus(int qno);
+
+	int updateAnswerStatus(int qno);
 
 }

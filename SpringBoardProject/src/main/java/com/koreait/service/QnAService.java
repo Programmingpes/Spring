@@ -27,7 +27,30 @@ public class QnAService {
 		return mapper.selectQnAlist(map);
 	}
 
-	public int selectAllCount(String id) {
-		return mapper.selectAllCount(id);
+	public int selectAllCount() {
+		return mapper.selectAllCount();
+	}
+
+	public List<QnADTO> selectAllQnAlist(int page) {
+		return mapper.selectAllQnAlist(page);
+	}
+
+	public QnADTO selectQnA(int qno) {
+		return mapper.selectQnA(qno);
+	}
+
+	public int updateAnswer(int qno, String response) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("qno", qno);
+		map.put("response", response);
+		return mapper.updateAnswer(map);
+	}
+
+	public int updateViewStatus(int qno) {
+		return mapper.updateViewStatus(qno);
+	}
+
+	public int updateAnswerStatus(int qno) {
+		return mapper.updateAnswerStatus(qno);
 	}
 }

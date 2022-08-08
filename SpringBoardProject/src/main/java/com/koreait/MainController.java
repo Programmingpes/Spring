@@ -385,7 +385,7 @@ public class MainController {
 		return "redirect:/qnaView.do";
 	}
 	
-	@RequestMapping("nextQnAList.do")
+	@RequestMapping("/nextQnAList.do")
 	public ResponseEntity<HashMap<String, Object>>
 	nextQnAList(int page, HttpSession session){
 		String id = (String) session.getAttribute("id");
@@ -407,5 +407,59 @@ public class MainController {
 		
 		return ResponseEntity.ok(map);
 	}
+	
+	@RequestMapping("/qnaAdminView.do")
+	public String qnaAdminView(@RequestParam(name = "page",defaultValue = "1") int page,
+			HttpSession session, Model model) {
+
+		String id = (String) session.getAttribute("id");
+		
+		if(id == null)
+			return "redirect:/loginView.do";
+		
+		List<QnADTO> list = qnaService.selectAllQnAlist(page);
+		model.addAttribute("list", list);
+		
+		int count = qnaService.selectAllCount();
+		PaggingVO vo = new PaggingVO(count,page,5,5);
+		model.addAttribute("page", vo);
+		return "admin_qna";
+	}
+	
+	@RequestMapping("/adminQnaDetailView.do")
+	public String adminQnaDetailView(int qno, Model model) {
+		QnADTO dto = qnaService.selectQnA(qno);
+		if(dto.getStatus() == 0)
+			qnaService.updateViewStatus(qno);
+		dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+		dto.setResponse(dto.getResponse().replaceAll("\n", "<br>"));
+		
+		
+		model.addAttribute("dto", dto);
+		return "admin_qna_view";
+	}
+	
+	@RequestMapping("/answer.do")
+	public String answer(int qno, String response, HttpSession session) {
+		String id = (String) session.getAttribute("id");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		
+		response = "답변자 : " + id + " 작성일 : " 
+		+ sdf.format(Calendar.getInstance().getTime())  + "\n" + response;
+		qnaService.updateAnswer(qno,response);
+		qnaService.updateAnswerStatus(qno);
+		
+		return "redirect:/adminQnaDetailView.do?qno="+qno;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
